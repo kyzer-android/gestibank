@@ -55,8 +55,16 @@ class DemandCreaCompte :
 
 
 
-    def affectation(self,agent): #l'admin affect un client a un agent
-        return bool
+    def affectation(self, agent, cnx=connexion()): #l'admin affect un client a un agent
+        try:
+            self.affect = agent
+            affectation = ("UPDATE demande_creation SET id =" + self.id + "WHERE agent =" + self.agent)
+            cnx.commit()
+            cnx.close()
+            return True
+        except:
+            return False
+
 
     def validation(self, valide) :  #L'agent valide le client
 
