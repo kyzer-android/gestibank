@@ -3,7 +3,13 @@
 
 class DemandCreaCompte:
     def __init__(self,valeur:dict):
-        #self.(donne crea compte)
+        self.nom
+        self.prenom
+        self.id
+        self.Mail
+        self.tel
+        self.adresse
+        self.justificatif
         self.valid
         self.affect
         pass
@@ -20,7 +26,8 @@ class DemandCreaCompte:
 
 
 class User:
-    self.id
+    def __init__(self,id,password,):
+
 
 
 """"
