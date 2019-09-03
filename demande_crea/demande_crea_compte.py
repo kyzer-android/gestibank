@@ -12,7 +12,7 @@ class DemandCreaCompte:
         self.justificatif
         self.valid
         self.affect
-        pass
+
 
     def enregistrement(self): #Stocakge d'une demmande dans la base de donnee (table demande)
         return bool
