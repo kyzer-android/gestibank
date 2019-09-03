@@ -4,7 +4,7 @@ from mysql.connector import connection
 import logging
 
 class DemandCreaCompte :
-    def connexion(base_de_donne='Gestbank',user='root',password=''):
+    def connexion(base_de_donne='Gestibank',user='root',password=''):
         try:
             cnx = connection.MySQLConnection(user=user, password=password,
                                              host='127.0.0.1', database=base_de_donne)
@@ -20,7 +20,7 @@ class DemandCreaCompte :
             return cnx
 
 
-    def __init__(self,valeur:dict,cnx=connexion()):
+    def __init__(self,valeur:dict):
 
         self.nom=valeur["nom"]
         self.prenom=valeur["prenom"]
@@ -34,7 +34,6 @@ class DemandCreaCompte :
 
 
 
-
     def enregistrement(self,cnx=connexion()): #Stocakge d'une demmande dans la base de donnee (table demande)
 
         cursor =cnx.cursor()
@@ -45,7 +44,7 @@ class DemandCreaCompte :
             data = [(self.nom,self.prenom,self.id,self.mail,self.tel,self.adresse,self.justificatif)]
             cursor.execute(insert_stmt, data)
             cnx.commit()
-            cnx.close()
+
 
         except :
             return False
@@ -53,26 +52,38 @@ class DemandCreaCompte :
         else :
             return  True
 
+        cnx.close()
+
 
 
     def affectation(self, agent, cnx=connexion()): #l'admin affect un client a un agent
+        cursor=cnx.cursor()
+        self.affect = agent
         try:
-            self.affect = agent
             affectation = ("UPDATE demande_creation SET id =" + self.id + "WHERE agent =" + self.agent)
+            cursor.execute(affectation)
             cnx.commit()
-            cnx.close()
-            return True
+
         except:
             return False
+        else :
+            return True
+        cnx.close()
 
+    def validation(self, valide,cnx=connexion()) :  #L'agent valide le client
+        cursor = cnx.cursor()
+        self.affect = valide
+        try:
+            validation = ("UPDATE demande_creation SET id =" + self.id + "WHERE validation =" + self.valide)
+            cursor.execute(validation)
+            cnx.commit()
 
-    def validation(self, valide) :  #L'agent valide le client
+        except:
+            return False
+        else:
+            return True
+        cnx.close()
 
-        return bool
-
-
-class User:
-    def __init__(self,id,password,):
 
 
 
