@@ -2,23 +2,10 @@
 from errno import errorcode
 from mysql.connector import connection
 import logging
-
+from sql import connexion
 
 class DemandCreaCompte:
-    def connexion(self, base_de_donne='Gestibank', user='root', password=''):
-        try:
-            cnx = connection.MySQLConnection(user=user, password=password,
-                                             host='127.0.0.1', database=base_de_donne)
-        except connection.errors.Error as err:
-            if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
-                logging.warning("Il y a un problème avec votre user name ou password")
-            elif err.errno == errorcode.ER_BAD_DB_ERROR:
-                logging.warning("La base n’existe pas")
-            else:
-                logging.warning(err)
-        else:
-            logging.info(" connexion reussi")
-            return cnx
+
 
     def __init__(self, valeur: dict):
 
@@ -32,8 +19,8 @@ class DemandCreaCompte:
         self.valid = None
         self.affect = None
 
-    def enregistrement(self, cnx=connexion()):  # Stocakge d'une demmande dans la base de donnee (table demande)
-
+    def enregistrement(self):  # Stocakge d'une demmande dans la base de donnee (table demande)
+        cnx = connexion()
         cursor = cnx.cursor()
 
         try:
@@ -52,7 +39,8 @@ class DemandCreaCompte:
 
         cnx.close()
 
-    def affectation(self, agent, cnx=connexion()):  # l'admin affect un client a un agent
+    def affectation(self, agent):  # l'admin affect un client a un agent
+        cnx = connexion()
         cursor = cnx.cursor()
         self.affect = agent
         try:
@@ -67,7 +55,8 @@ class DemandCreaCompte:
             return True
         cnx.close()
 
-    def validation(self, valide, cnx=connexion()):  # L'agent valide le client
+    def validation(self, valide):  # L'agent valide le client
+        cnx = connexion()
         cursor = cnx.cursor()
         self.affect = valide
         try:
@@ -93,13 +82,14 @@ class DemandCreaCompte:
 """
 
 if __name__ == "__main__":
-    test = {"nom": "dieoz",
-            "prenom": "marc",
-            "id": "145",
-            "mail": "truc@mac.com",
-            "tel": "01546843",
-            "adresse": "5 rue de la voie rouge 91216  Lamotte",
-            "justificatif": "repertoir\distant\ "
-            }
-
-objet_test = DemandCreaCompte
+    cnx = connexion()
+    #     test = {"nom": "dieoz",
+    #             "prenom": "marc",
+    #             "id": "145",
+    #             "mail": "truc@mac.com",
+    #             "tel": "01546843",
+    #             "adresse": "5 rue de la voie rouge 91216  Lamotte",
+    #             "justificatif": "repertoir\distant\ "
+    #             }
+    #
+    # objet_test = DemandCreaCompte
