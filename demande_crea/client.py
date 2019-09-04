@@ -1,33 +1,58 @@
-from demande_crea import user
+from demande_crea.user import User
+
 from sql import connexion
 import  logging
 
 
-class client (user) :
+class client (User) :
     def __init__(self,id):
-        cnx = connexion()
-        cursor = cnx.cursor()
-        try :
-            result  = ("Select mail ,tel,adresse,justificatif from client  where id = "+id)
-            cursor.execute(result)
+        super().__init__("Client", id)
+
+
+    def modifMDP (self,oldMDP,newMDP):
+        cnx=connexion()
+        cnx.autocommit=True
+        cursor=cnx.cursor()
+        try:
+
+            data = ("SELECT PASSWORD FROM login WHERE id = "+self.id +
+                    " and Password = PASSWORD('"+oldMDP+"')")
+            logging.debug(data)
+            cursor.execute(data)
             row = cursor.fetchone()
-            if cursor.rowcount == -1 :
-                logging.warning("Utilisateur Inconnu")
-            elif cursor.rowcount == 1 :
-                print(row)
-            else :
-                logging.warning("Erreur de parametre")
-            self.mail = row[0]
-            self.tel = row[1]
-            self.adresse = row[2]
-            self.justificatif = row[3]
-            
-        except :
-            logging.warning("Probleme de recherche ")
+            changement= ("UPDATE login set Password = PASSWORD('" + newMDP +
+                             "') where ID =" + self.id)
 
-x=client("0020")
-print(x)
+            logging.debug(changement)
+            cursor.execute(changement)
 
+
+            print("changement reussi")
+
+        except Exception as e:
+            logging.warning("Erreur de recherche ",e)
+            logging.error(cursor.statement)
+
+
+
+
+    def afficher(self):
+            test = (self.id,
+                    self.nom,
+                    self.prenom,
+                    self.type_user,
+                    self.mail,
+                    self.tel,
+                    self.adresse,
+                    self.justificatif)
+
+            print(str(test))
+
+x=client('0021')
+x.afficher()
+
+x.modifMDP('oussama','oussa')
+#print (x)
    # def acces (self):
       #  user.identification()
 
