@@ -2,7 +2,7 @@ import mysql.connector as mysql
 import logging
 from sql import connexion
 from demande_crea.user import User
-from demande_crea_compte import DemandCreaCompte as Creation
+from demande_crea.demande_crea_compte import DemandCreaCompte as Creation
 
 
 class Agent(User):
@@ -12,19 +12,20 @@ class Agent(User):
         super().__init__("AGENT", id)
 
 
-    """def flitre_compte(self):
+    def flitre_compte(self):
         cnx = connexion()
         cursor = cnx.cursor()
+        try :
+            logging.debug("SELECT * FROM demande_creacompte WHERE affect = '" + self.matricule+"'")
+            cursor.execute("SELECT * FROM demande_creacompte WHERE affect = '" + self.matricule+"'")
+        except:
+            logging.warning("Erreur base de donnée")
 
 
 
 
 
-
-
-
-
-    def validation(self): #Validation création d'ouverture de compte
+    """def validation(self): #Validation création d'ouverture de compte
         cnx = connexion()
         cursor = cnx.cursor()
 
@@ -59,20 +60,22 @@ class Agent(User):
 
 
     def valid_facilite(self): #Validation facilité de caisse
-    """
+"""
 
     def afficher(self):
 
 
-        test = (self.ID,
-        self.NOM,
-        self.PRENOM,
-        self.TYPE_USER,
-        self.EMAIL,
-        self.TEL,
-        self.DEBUT_CONTRAT)
+        test = (self.id,
+        self.nom,
+        self.prenom,
+        self.type_user,
+        self.email,
+        self.tel,
+        self.debut_contrat)
 
         print(str(test))
 
-u = Agent( "00014")
+
+u = Agent("0000")
 u.afficher()
+u.flitre_compte()
