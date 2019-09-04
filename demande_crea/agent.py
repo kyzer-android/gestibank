@@ -1,27 +1,22 @@
 import mysql.connector as mysql
 import logging
 from sql import connexion
+from demande_crea.user import User
 from demande_crea_compte import DemandCreaCompte as Creation
 
 
-class Agent:
-    cnx = mysql.connect(host="localhost", user="root", password="", database="gestibank")
+class Agent(User):
+    #cnx = connexion()
 
-    def __init__(self, **arg):
-        self.id ==
-        self.nom =
-        self.prenom =
-        self.type_user =
-        self.matricule =
-        self.email =
-        self.tel =
-        self.debut_contrat =
-        self.valid = None
+    def __init__(self, id):
+        super().__init__("AGENT", id)
 
 
-    def flitre_compte(self):
+    """def flitre_compte(self):
         cnx = connexion()
         cursor = cnx.cursor()
+
+
 
 
 
@@ -64,3 +59,20 @@ class Agent:
 
 
     def valid_facilite(self): #Validation facilité de caisse
+    """
+
+    def afficher(self):
+
+
+        test = (self.ID,
+        self.NOM,
+        self.PRENOM,
+        self.TYPE_USER,
+        self.EMAIL,
+        self.TEL,
+        self.DEBUT_CONTRAT)
+
+        print(str(test))
+
+u = Agent( "00014")
+u.afficher()
