@@ -2,11 +2,11 @@ import mysql.connector as mysql
 import logging
 from sql import connexion
 from demande_crea.user import User
-from demande_crea_compte import DemandCreaCompte as Creation
+
 
 
 class Agent(User):
-    #cnx = connexion()
+
 
     def __init__(self, id):
         super().__init__("AGENT", id)
@@ -64,13 +64,13 @@ class Agent(User):
     def afficher(self):
 
 
-        test = (self.ID,
-        self.NOM,
-        self.PRENOM,
-        self.TYPE_USER,
-        self.EMAIL,
-        self.TEL,
-        self.DEBUT_CONTRAT)
+        test = (self.id,
+        self.nom,
+        self.prenom,
+        self.type_user,
+        self.email,
+        self.tel,
+        self.debut_contrat)
 
         print(str(test))
 

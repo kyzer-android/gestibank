@@ -2,9 +2,6 @@
 import mysql.connector as mysql
 import logging
 
-logging.basicConfig(level=logging.DEBUG)
-
-
 def connexion(base_de_donne='Gestibank', user='root', password=''): #@TODO cree user "gestiUser" sur sql
     try:
         cnx = mysql.connection.MySQLConnection(user=user, password=password,
