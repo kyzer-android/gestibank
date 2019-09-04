@@ -1,63 +1,51 @@
 import mysql.connector as mysql
 import logging
-
+from sql import connexion
 logging.basicConfig(level=logging.DEBUG)
-
-
 class User:
-    def identification(login, password):
-        pass
+    def __init__(self,type_user,id):
+        cnx = connexion()
+        cursor = cnx.cursor()
+        logging.debug("SELECT column_name FROM information_schema.columns WHERE table_name = '" + type_user +
+                      "' AND table_schema='Gestibank';")
+        cursor.execute(
+            "SELECT column_name FROM information_schema.columns WHERE table_name = '" + type_user + "' AND table_schema='Gestibank';")
+        res=cursor.fetchall()
 
-    def __init__(self, id, password, ):
-        pass
-
-
-def connexion(base_de_donne='Gestibank', user='root', password=''):
-    try:
-        cnx = mysql.connection.MySQLConnection(user=user, password=password,
-                                               host='127.0.0.1', database=base_de_donne)
-    except mysql.connection.errors.Error as err:
-        if err.errno == mysql.errorcode.ER_ACCESS_DENIED_ERROR:
-            logging.debug("Il y a un problème avec votre user name ou password")
-        elif err.errno == mysql.errorcode.ER_BAD_DB_ERROR:
-            logging.debug("La base n’existe pas")
-        else:
-            logging.debug(err)
-    else:
-        logging.info(" connexion reussi")
-        return cnx
+        for colone in res:
+            command=("Select " + colone[0] + " from " + type_user + " where id = " + id)
+            logging.debug(command)
+            cursor.execute(command)
+            value=cursor.fetchone()
+            self.__setattr__(colone[0].lower(),value[0] )
 
 
+    def affiche_donne_curs(curs):
+
+        for ligne in curs:
+            print(ligne)
+
+
+    def identification(ID):
+            Statut=False
+            cnx=connexion()
+            cursor=cnx.cursor()
+            cursor.execute("SELECT * FROM `login` WHERE ID = "+ID)
+            row=cursor.fetchone()
+            if cursor.rowcount==-1:
+                print("Utilisateur innconnu")
+            elif cursor.rowcount==1:
+                 print(row)
+            else :
+                print("erreur de paramètre")
+
+def affiche_client(client):
+    print("nom:{},Prenom :{},")
+    type_user="client"
+    id="0020"
+if __name__=="__main__":
+    u=User("client","0020")
 
 
 
-def definit_user_type(login,cnx=connexion()):
-    cursor = cnx.cursor()
-    try:
 
-        cursor.execute("SELECT * FROM client where id = " + login)
-        cnx.commit()
-    except mysql.Error as e:
-        if e.errno == -1:
-            try:
-                cursor.execute("SELECT * FROM agent where id = " + login)
-                cnx.commit()
-            except mysql.Error as f:
-                if f.errno == -1:
-                    try:
-                        cursor.execute("SELECT * FROM admin where id = " + login)
-                        cnx.commit()
-                    except mysql.Error as g:
-                        if g.errno == -1:
-                            logging.warning("L'utilisateur n'existe pas")
-
-                        else:
-                            logging.info("L'utilisateur est du type admin")
-
-                else:
-                    logging.info("L'utilisateur est du type agent")
-        else:
-            logging.info("L'utilisateur est du type client")
-
-
-definit_user_type("0020")

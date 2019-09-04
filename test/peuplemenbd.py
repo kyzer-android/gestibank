@@ -85,6 +85,34 @@ for i in range(0, 10):
     ligne = (ID, NOM, PRENOM, EMAIL, nombre, 'adresse', 'None')
     peuplement_creacompte(ligne, connexion())
 
+
+
+def definit_user_type(login):
+    cnx = connexion()
+    cursor = cnx.cursor()
+    try:
+
+        cursor.execute("SELECT * FROM client where id = " + login)
+    except mysql.Error as e:
+        if e.errno == -1:
+            try:
+                cursor.execute("SELECT * FROM agent where id = " + login)
+            except mysql.Error as f:
+                if f.errno == -1:
+                    try:
+                        cursor.execute("SELECT * FROM admin where id = " + login)
+                    except mysql.Error as g:
+                        if g.errno == -1:
+                            logging.warning("L'utilisateur n'existe pas")
+
+                        else:
+                            logging.info("L'utilisateur est du type admin")
+
+                else:
+                    logging.info("L'utilisateur est du type agent")
+        else:
+            logging.info("L'utilisateur est du type client")
+
 # for i in range(0, 20):
 #     ID = '000' + str(i)
 #     NOM = 'nom_agent_0' + str(i)
