@@ -1,7 +1,7 @@
 #agent
 import logging
 from sql.sql import connexion
-from compte_user.userfuction import User
+from compte_user.user import User
 
 
 class Agent(User):
@@ -13,6 +13,7 @@ class Agent(User):
     def flitre_compte(self):  # Filtre les demande de création de compte avec le matricule agent
         cnx = connexion()
         cursor = cnx.cursor()
+
         try:
             logging.debug("SELECT * FROM demande_creacompte WHERE affect = '" + self.matricule + "'")
             cursor.execute("SELECT * FROM demande_creacompte WHERE affect = '" + self.matricule + "'")
@@ -76,7 +77,7 @@ class Agent(User):
                 self.tel,
                 self.debut_contrat)
 
-        return (str(test))
+        return str(test)
 
     def mise_a_jour(self, **kwargs):
         list_arg = dict({"nom": self.nom,

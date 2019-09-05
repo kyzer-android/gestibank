@@ -18,7 +18,6 @@ class Client(User):
                     " and Password = PASSWORD('" + oldMDP + "')")
             logging.debug(data)
             cursor.execute(data)
-            row = cursor.fetchone()
             changement = ("UPDATE login set Password = PASSWORD('" + newMDP +
                           "') where ID =" + self.id)
 
@@ -41,7 +40,7 @@ class Client(User):
                 self.adresse,
                 self.justificatif)
 
-        return(str(test))
+        return str(test)
 
     def mise_a_jour(self):
         list_arg = dict({"nom": self.nom,
@@ -57,5 +56,12 @@ class Client(User):
 if __name__ == "__main__":
     x = Client('0021')
     print(x)
+    x.nom="456dsdjss$"
     x.mise_a_jour()
+    print(x)
+    y=Client('tesdsqst')
+    y.nom='maoz'
+
+    y.mise_a_jour()
+    print(y)
 
