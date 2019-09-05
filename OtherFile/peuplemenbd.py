@@ -50,18 +50,18 @@ def peuplement_agent(ligne_bd, cnx):
     logging.debug(cursor)
     cnx.commit()
     cnx.close()
-
-
-def peuplement_client(ligne_bd, cnx):
+def peuplement_compte(ligne_bd, cnx):
     cursor = cnx.cursor()
     insert_stmt = (
-        "INSERT INTO `client`(`ID`, `NOM`, `PRENOM`, `TYPE_USER`, `MAIL`, `TEL`, `ADRESSE`, `JUSTIFICATIF`) "
+        "INSERT INTO `agent`(`ID`, `NOM`, `PRENOM`, `TYPE_USER`, `MATRICULE`, `EMAIL`, `TEL`, `DEBUT_CONTRAT`) "
         "VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
     )
     cursor.execute(insert_stmt, ligne_bd)
     logging.debug(cursor)
     cnx.commit()
     cnx.close()
+
+
 
 
 def peuplement_creacompte(ligne_bd, cnx):
@@ -84,6 +84,29 @@ for i in range(0, 10):
     nombre = str(random.randint(1000000000, 9999999999))
     ligne = (ID, NOM, PRENOM, EMAIL, nombre, 'adresse', 'None')
     peuplement_creacompte(ligne, connexion())
+
+
+def peuplement_creacompte(ligne_bd, cnx):
+        cursor = cnx.cursor()
+        insert_stmt = (
+            "INSERT INTO demande_creacompte (`ID_compte`, `Type_compte`, `Date_creation`, `Rib`, `Valeur_depas`, `Solde`, `CC_Decouverte`, `AGIOS`)"
+            "VALUES (%s, %s, %s, %s, %s, %b, %s)"
+        )
+        cursor.execute(insert_stmt, ligne_bd)
+        logging.debug(cursor)
+        cnx.commit()
+        cnx.close()
+
+
+for i in range(0, 10):
+        ID_compte = '100' + str(i)
+        Type_compte = 'nom' + str(i)
+        Date_creation = 'prenom_' + str(i)
+        Rib = str(random.randint(1000000000, 9999999999))
+        Solde = str(random.randint(1000000000, 9999999999))
+
+        ligne = (ID_compte, Type_compte, Date_creation, Rib, 'Valeur', Solde , 'None', 'Valeur')
+        peuplement_creacompte(ligne, connexion())
 
 
 
