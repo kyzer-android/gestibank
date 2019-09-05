@@ -11,26 +11,6 @@ class Agent(User):
     def __init__(self, id):
         super().__init__("AGENT", id)
 
-    def flitre_compte(self):  # Retourne les demande de création de compte avec le id agent
-        cnx = connexion()
-        cursor = cnx.cursor()
-        requette = "SELECT * FROM demande_creacompte WHERE affect = '" + self.id + "'"
-
-        try:
-            logging.debug(requette)
-            cursor.execute(requette)
-            list_crea = cursor.fetchall()
-
-            for demande in list_crea :
-                logging.debug(demande)
-
-        except:
-            logging.warning("Erreur base de donnée")
-
-        else:
-
-            return list_crea
-
     def __str__(self):
         test = (self.id,
                 self.nom,
@@ -49,31 +29,41 @@ class Agent(User):
                           "tel": self.tel})
         User.update("agent", self.id, **list_arg)
 
-"""
-    def validation(self, agent_validation: bool):  # Validation création d'ouverture de compte
+
+
+    def flitre_compte(self):  # Retourne les demande de création de compte avec le id agent
         cnx = connexion()
         cursor = cnx.cursor()
-        self.valid = agent_validation
-        # agent_validation = bool(input("Validez-vous cette création?"))
-        if self.valid is True:
-            cursor.execute("SELECT VALIDE FROM demande_creacompte affect 1")
-        elif self.valid is False:
-            cursor.execute("SELECT VALIDE FROM demande_creacompte affect 0")
-        else:
-            print("Erreur")
-
-    def creation_compte_User(self, id):
-
-        ajout_clien = ("INSERT INTO client (ID, NOM, PRENOM, MAIL, TEL, ADRESSE, JUSTIFICATIF)")
-        demande_clien = ("VALUE FROM demande_creacompte (ID, NOM, PRENOM, MAIL, TEL, ADRESSE, JUSTIFICATIF)")
+        requette = "SELECT * FROM demande_creacompte WHERE affect = '" + self.id + "'"
 
         try:
-            if self.valid is True:  # @Si la demande est validé, création du compte, plus envoi un mail avec login/mdp
-                cursor.execute(ajout_clien, demande_clien)
-                cursor.execute("INSERT INTO client (NOM, PRENOM, MAIL, TEL, ADRESSE, JUSTIFICATIF)"
-                               "VALUE FROM demande_creacompte (NOM, PRENOM, MAIL, TEL, ADRESSE, JUSTIFICATIF)")
+            logging.debug(requette)
+            cursor.execute(requette)
+            liste_crea = cursor.fetchall()
 
-                # TODO Envoi d'un mail contenant l'id et le mot de passe
+            for demande in liste_crea :
+                logging.debug(demande)
+
+        except:
+            logging.warning("Erreur base de donnée")
+
+        else:
+            liste_obj = []
+            for element in liste_crea:
+                liste_obj.append(Creation(element))
+            return liste_obj
+
+
+
+
+    def validation_Crea(self, objet, valid_crea:bool): # Validation création d'ouverture de compte
+        #requette = "UPDATE demande_creacompte SET affect = True where id = '" + self.id + "'"
+        objet.validation(valid_crea)
+        if objet.valide is True: # @Si la demande est validé, création du compte, plus envoi un mail avec login/mdp
+            # TODO envoi de mail avec id/mdp
+            Creation.creation_compte_User()
+        elif objet.valide
+
 
 
             elif self.valid is False:  # @sil la demande n'est pas valider (envoi de mail + demande mis en attente)
@@ -87,6 +77,7 @@ class Agent(User):
             pass
             # TODO Création d'un compte banquaire par default avec la classe création de compte banquaire
 
+"""
     def modif_compte_User(self):  # Modification compte client
         pass
 
@@ -103,5 +94,4 @@ class Agent(User):
 if __name__ == "__main__":
     u = Agent("0000")
     list = u.flitre_compte()
-    print(type(list))
-
+    print(type(list[1]))

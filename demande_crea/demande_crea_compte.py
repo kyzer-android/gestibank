@@ -6,9 +6,9 @@ from sql.sql import connexion
 class DemandCreaCompte:
 
     def __init__(self, valeur):
-        logging.debug(type(valeur))
+        #logging.debug(type(valeur))
         if type(valeur) == type(dict()):
-            logging.debug("inside dict")
+            #logging.debug("inside dict")
             self.nom = valeur["nom"]
             self.prenom = valeur["prenom"]
             self.id = valeur["id"]
@@ -20,7 +20,7 @@ class DemandCreaCompte:
             self.affect = None
 
         elif type(valeur) == type(tuple()):
-            logging.debug("inside tuple")
+            #logging.debug("inside tuple")
             self.nom = valeur[0]
             self.prenom = valeur[1]
             self.id = valeur[2]
@@ -36,8 +36,8 @@ class DemandCreaCompte:
         cursor = cnx.cursor()
 
         try:
-            insert_stmt = (
-                "INSERT into demande_creation (nom,prenom,id,mail,telephone,adresse,justificatif)" "VALUES (%s ,%s, %s, %s,%s ,%s, %s)")
+            insert_stmt = ("INSERT into demande_creation (nom,prenom,id,mail,telephone,adresse,justificatif)"
+                           "VALUES (%s ,%s, %s, %s,%s ,%s, %s)")
             data = [(self.nom, self.prenom, self.id, self.mail, self.tel, self.adresse, self.justificatif)]
             cursor.execute(insert_stmt, data)
             cnx.commit()
@@ -48,15 +48,16 @@ class DemandCreaCompte:
 
         else:
             return True
-
-        cnx.close()
+        finally:
+            cnx.close()
 
     def affectation(self, agent):  # l'admin affect un client a un agent
         cnx = connexion()
         cursor = cnx.cursor()
         self.affect = agent
         try:
-            affectation = ("UPDATE demande_creation SET id =" + self.id + "WHERE agent =" + self.agent)
+            affectation = ("UPDATE demande_creacompte SET affect = " + self.affect+" WHERE  id =" + self.id )
+            logging.debug(affectation)
             cursor.execute(affectation)
             cnx.commit()
 
@@ -65,14 +66,16 @@ class DemandCreaCompte:
             return False
         else:
             return True
-        cnx.close()
+        finally:
+            cnx.close()
 
     def validation(self, valide):  # L'agent valide le client
         cnx = connexion()
         cursor = cnx.cursor()
-        self.affect = valide
+        self.valid = valide
         try:
-            validation = ("UPDATE demande_creation SET id =" + self.id + "WHERE validation =" + self.valide)
+            validation = ("UPDATE demande_creacompte SET valide = " + self.valid+" WHERE  id =" + self.id )
+            logging.debug(validation)
             cursor.execute(validation)
             cnx.commit()
 
@@ -81,7 +84,8 @@ class DemandCreaCompte:
             return False
         else:
             return True
-        cnx.close()
+        finally:
+            cnx.close()
 
     def __str__(self):
         test = (
@@ -97,15 +101,18 @@ class DemandCreaCompte:
         )
         return str(test)
 
+    def creation_compte_User(self):
+        cnx = connexion()
+        cursor = cnx.cursor()
+        ajout_clien = ("INSERT INTO client (ID, NOM, PRENOM, MAIL, TEL, ADRESSE, JUSTIFICATIF, AGENT_AFFECTER)"
+                       "VALUES ( %s, %s, %s, %s, %s, %s, %s, %s)")
+        demande_clien = (self.id, self.nom, self.prenom, self.mail, self.tel, self.adresse, self.justificatif,
+                         self.affect)
+        cursor.execute(ajout_clien, demande_clien)
+        cnx.commit()
 
-""""
-  def lister_demande(self): #Affiche toutes les demande en cours
-        return list(dict)
+        cnx.close()
 
-    def selectionner_une_demande(self, dict, pos):  # recoit la list(dict) de lister_demande et renvoi un dict
-        return dict[pos]
-
-"""
 
 if __name__ == "__main__":
     cnx = connexion()
@@ -119,7 +126,8 @@ if __name__ == "__main__":
             }
 
     objet_test = DemandCreaCompte(test)
+
+    #objet_test2=DemandCreaCompte(('dieoz', 'marc', '145', 'truc@mac.com', '01546843', '5 rue de la voie rouge 91216  Lamotte', 'repertoir\\distant\\ ', None, None)
+    objet_test.validation("true")
     print(objet_test)
-    objet_test2=DemandCreaCompte(('dieoz', 'marc', '145', 'truc@mac.com', '01546843', '5 rue de la voie rouge 91216  Lamotte', 'repertoir\\distant\\ ', None, None)
-                                 )
-    print(objet_test)
+    objet_test.creation_compte_User()

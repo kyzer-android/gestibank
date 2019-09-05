@@ -9,14 +9,14 @@ class User:
         cnx = connexion()
         cursor = cnx.cursor()
         # Recuperation de la liste des nom de colone
-        logging.debug("SELECT column_name FROM information_schema.columns WHERE table_name = '" + type_user +
-                      "' AND table_schema='Gestibank';")
-        cursor.execute(
-            "SELECT column_name FROM information_schema.columns WHERE table_name = '" + type_user + "' AND table_schema='Gestibank';")
+        param=("SELECT column_name FROM information_schema.columns WHERE table_name = '" + type_user +
+              "' AND table_schema='Gestibank';")
+        logging.debug(param)
+        cursor.execute(param)
         res = cursor.fetchall()
         # verifie si l'objet existe dans la BD grace a son id,si non le cree
         if not User.trouver_id(type_user, id):
-            logging.warning("L'ID N''A PAS été trouvé ")
+            logging.warning("L'ID N'A PAS été trouvé ")
             for colone in res:
                 self.__setattr__(colone[0].lower(), None)
             self.id = id
@@ -28,7 +28,7 @@ class User:
                 cursor.execute(command)
                 value = cursor.fetchone()
                 self.__setattr__(colone[0].lower(), value[0])
-
+        cnx.close()
 
     @classmethod
     def login(self, id, password):
@@ -40,6 +40,7 @@ class User:
         type_user = cursor.fetchone()
         logging.debug("login reussi")
         logging.debug(type_user)
+        cnx.close()
         return type_user
 
 
@@ -74,7 +75,8 @@ class User:
                cnx.commit()
             except Exception as e:
                 logging.warning("Problème avec la base:",e)
-
+            finally:
+                cnx.close()
 
 
     @classmethod  # Cherche une id dans une table
@@ -85,6 +87,7 @@ class User:
         logging.debug(param)
         cursor.execute(param)
         test = cursor.fetchone()
+        cnx.close()
         try:
             test[0] == id
         except:
@@ -93,5 +96,5 @@ class User:
             return True
 
 
+
 if __name__ == "__main__":
-    User.create("admin", "0sd01")
