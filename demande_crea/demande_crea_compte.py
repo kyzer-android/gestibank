@@ -2,20 +2,34 @@
 import logging
 from sql.sql import connexion
 
+
 class DemandCreaCompte:
 
+    def __init__(self, valeur):
+        logging.debug(type(valeur))
+        if type(valeur) == type(dict()):
+            logging.debug("inside dict")
+            self.nom = valeur["nom"]
+            self.prenom = valeur["prenom"]
+            self.id = valeur["id"]
+            self.mail = valeur["mail"]
+            self.tel = valeur["tel"]
+            self.adresse = valeur["adresse"]
+            self.justificatif = valeur["justificatif"]
+            self.valid = None
+            self.affect = None
 
-    def __init__(self, valeur: dict):
-
-        self.nom = valeur["nom"]
-        self.prenom = valeur["prenom"]
-        self.id = valeur["id"]
-        self.mail = valeur["mail"]
-        self.tel = valeur["tel"]
-        self.adresse = valeur["adresse"]
-        self.justificatif = valeur["justificatif"]
-        self.valid = None
-        self.affect = None
+        elif type(valeur) == type(tuple()):
+            logging.debug("inside tuple")
+            self.nom = valeur[0]
+            self.prenom = valeur[1]
+            self.id = valeur[2]
+            self.mail = valeur[3]
+            self.tel = valeur[4]
+            self.adresse = valeur[5]
+            self.justificatif = valeur[6]
+            self.valid = valeur[7]
+            self.affect = valeur[8]
 
     def enregistrement(self):  # Stocakge d'une demmande dans la base de donnee (table demande)
         cnx = connexion()
@@ -69,6 +83,20 @@ class DemandCreaCompte:
             return True
         cnx.close()
 
+    def __str__(self):
+        test = (
+            self.nom,
+            self.prenom,
+            self.id,
+            self.mail,
+            self.tel,
+            self.adresse,
+            self.justificatif,
+            self.valid,
+            self.affect
+        )
+        return str(test)
+
 
 """"
   def lister_demande(self): #Affiche toutes les demande en cours
@@ -81,13 +109,17 @@ class DemandCreaCompte:
 
 if __name__ == "__main__":
     cnx = connexion()
-    #     test = {"nom": "dieoz",
-    #             "prenom": "marc",
-    #             "id": "145",
-    #             "mail": "truc@mac.com",
-    #             "tel": "01546843",
-    #             "adresse": "5 rue de la voie rouge 91216  Lamotte",
-    #             "justificatif": "repertoir\distant\ "
-    #             }
-    #
-    # objet_test = DemandCreaCompte
+    test = {"nom": "dieoz",
+            "prenom": "marc",
+            "id": "145",
+            "mail": "truc@mac.com",
+            "tel": "01546843",
+            "adresse": "5 rue de la voie rouge 91216  Lamotte",
+            "justificatif": "repertoir\distant\ "
+            }
+
+    objet_test = DemandCreaCompte(test)
+    print(objet_test)
+    objet_test2=DemandCreaCompte(('dieoz', 'marc', '145', 'truc@mac.com', '01546843', '5 rue de la voie rouge 91216  Lamotte', 'repertoir\\distant\\ ', None, None)
+                                 )
+    print(objet_test)

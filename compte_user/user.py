@@ -16,6 +16,7 @@ class User:
         res = cursor.fetchall()
         # verifie si l'objet existe dans la BD grace a son id,si non le cree
         if not User.trouver_id(type_user, id):
+            logging.warning("L'ID N''A PAS été trouvé ")
             for colone in res:
                 self.__setattr__(colone[0].lower(), None)
             self.id = id
