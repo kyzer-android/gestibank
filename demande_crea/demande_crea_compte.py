@@ -36,8 +36,8 @@ class DemandCreaCompte:
         cursor = cnx.cursor()
 
         try:
-            insert_stmt = (
-                "INSERT into demande_creation (nom,prenom,id,mail,telephone,adresse,justificatif)" "VALUES (%s ,%s, %s, %s,%s ,%s, %s)")
+            insert_stmt = ("INSERT into demande_creation (nom,prenom,id,mail,telephone,adresse,justificatif)"
+                           "VALUES (%s ,%s, %s, %s,%s ,%s, %s)")
             data = [(self.nom, self.prenom, self.id, self.mail, self.tel, self.adresse, self.justificatif)]
             cursor.execute(insert_stmt, data)
             cnx.commit()
@@ -48,8 +48,8 @@ class DemandCreaCompte:
 
         else:
             return True
-
-        cnx.close()
+        finally:
+            cnx.close()
 
     def affectation(self, agent):  # l'admin affect un client a un agent
         cnx = connexion()
@@ -66,7 +66,8 @@ class DemandCreaCompte:
             return False
         else:
             return True
-        cnx.close()
+        finally:
+            cnx.close()
 
     def validation(self, valide):  # L'agent valide le client
         cnx = connexion()
@@ -83,7 +84,8 @@ class DemandCreaCompte:
             return False
         else:
             return True
-        cnx.close()
+        finally:
+            cnx.close()
 
     def __str__(self):
         test = (
@@ -99,7 +101,17 @@ class DemandCreaCompte:
         )
         return str(test)
 
+    def creation_compte_User(self):
+        cnx = connexion()
+        cursor = cnx.cursor()
+        ajout_clien = ("INSERT INTO client (ID, NOM, PRENOM, MAIL, TEL, ADRESSE, JUSTIFICATIF, AGENT_AFFECTER)"
+                       "VALUES ( %s, %s, %s, %s, %s, %s, %s, %s)")
+        demande_clien = (self.id, self.nom, self.prenom, self.mail, self.tel, self.adresse, self.justificatif,
+                         self.affect)
+        cursor.execute(ajout_clien, demande_clien)
+        cnx.commit()
 
+        cnx.close()
 
 
 if __name__ == "__main__":
@@ -118,3 +130,4 @@ if __name__ == "__main__":
     #objet_test2=DemandCreaCompte(('dieoz', 'marc', '145', 'truc@mac.com', '01546843', '5 rue de la voie rouge 91216  Lamotte', 'repertoir\\distant\\ ', None, None)
     objet_test.validation("true")
     print(objet_test)
+    objet_test.creation_compte_User()
