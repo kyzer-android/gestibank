@@ -1,8 +1,6 @@
 """Le front renvoi un dictionnaire contenant toutes les valeurs"""
-from errno import errorcode
-from mysql.connector import connection
 import logging
-from sql import connexion
+from sql.sql import connexion
 
 class DemandCreaCompte:
 
