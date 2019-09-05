@@ -35,8 +35,12 @@ class Admin(User):
         liste_obj=[]
         for element in cursor:
             liste_obj.append(DemandCreaCompte(element))
-
+        cnx.close()
         return liste_obj
+
+
+    def affecter_demande(self,agent):
+        pass
 
     def __str__(self):
         test = (self.id,
