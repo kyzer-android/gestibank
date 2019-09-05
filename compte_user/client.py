@@ -29,6 +29,7 @@ class Client(User):
         except Exception as e:
             logging.warning("Erreur de recherche ", e)
             logging.error(cursor.statement)
+        cnx.close()
 
     def __str__(self):
         test = (self.id,
