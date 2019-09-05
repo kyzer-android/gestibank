@@ -39,8 +39,8 @@ class Admin(User):
         return liste_obj
 
 
-    def affecter_demande(self,agent):
-        pass
+    def affecter_demande(self,objet,agent):
+        objet.affectation(agent)
 
     def __str__(self):
         test = (self.id,
