@@ -100,14 +100,7 @@ class DemandCreaCompte:
         return str(test)
 
 
-""""
-  def lister_demande(self): #Affiche toutes les demande en cours
-        return list(dict)
 
-    def selectionner_une_demande(self, dict, pos):  # recoit la list(dict) de lister_demande et renvoi un dict
-        return dict[pos]
-
-"""
 
 if __name__ == "__main__":
     cnx = connexion()
