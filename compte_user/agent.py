@@ -1,9 +1,10 @@
-#agent
+# agent
 import logging
 from sql.sql import connexion
 from compte_user.user import User
 from demande_crea.demande_crea_compte import DemandCreaCompte as Creation
 import datetime
+
 
 class Agent(User):
     # cnx = connexion()
@@ -16,27 +17,28 @@ class Agent(User):
                 self.nom,
                 self.prenom,
                 self.type_user,
-                self.email,
+                self.mail,
                 self.tel,
                 self.debut_contrat)
         return str(test)
 
     @classmethod
-    def cree_compte_agent(self,valeur):
+    def cree_compte_agent(self, valeur):
+        cnx = connexion()
+        cursor = cnx.cursor()
         if type(valeur) == type(dict()):
             logging.debug("inside dict")
             id = valeur["id"]
             nom = valeur["nom"]
             prenom = valeur["prenom"]
-            email = valeur["email"]
+            mail = valeur["mail"]
             tel = valeur["tel"]
-            debut_contrat =datetime.date.today()
+            debut_contrat = datetime.date.today()
             logging.debug(debut_contrat)
-            cnx=connexion()
-            cursor=cnx.cursor()
-            ajout_clien = ("INSERT INTO agent (ID, NOM, PRENOM, EMAIL, TEL, DEBUT_CONTRAT)"
+
+            ajout_clien = ("INSERT INTO agent (ID, NOM, PRENOM, MAIL, TEL, DEBUT_CONTRAT)"
                            "VALUES ( %s, %s, %s, %s, %s, %s)")
-            demande_clien = (id, nom, prenom,email, tel,debut_contrat)
+            demande_clien = (id, nom, prenom, mail, tel, debut_contrat)
 
         try:
             cursor.execute(ajout_clien, demande_clien)
@@ -44,20 +46,17 @@ class Agent(User):
         except Exception as e:
             logging.warning("problème d'insertion ", e)
         finally:
-             cnx.close()
+            cnx.close()
 
-    def modification_compte_agent(self,valeur):
-            pass
-
+    def modification_compte_agent(self, valeur):
+        pass
 
     def mise_a_jour(self, **kwargs):
-            list_arg = dict({"nom": self.nom,
-                             "prenom": self.prenom,
-                              "email": self.email,
-                              "tel": self.tel})
-            User.update("agent", self.id, **list_arg)
-
-
+        list_arg = dict({"nom": self.nom,
+                         "prenom": self.prenom,
+                         "mail": self.mail,
+                         "tel": self.tel})
+        User.update("agent", self.id, **list_arg)
 
     def flitre_compte(self):  # Retourne les demande de création de compte avec le id agent
         cnx = connexion()
@@ -68,7 +67,7 @@ class Agent(User):
             cursor.execute(requette)
             liste_crea = cursor.fetchall()
 
-            for demande in liste_crea :
+            for demande in liste_crea:
                 logging.debug(demande)
         except:
             logging.warning("Erreur base de donnée")
@@ -78,14 +77,14 @@ class Agent(User):
                 liste_obj.append(Creation(element))
             return liste_obj
 
-    def validation_Crea(self, objet_demandecrea, valid_crea:bool): # Validation création d'ouverture de compte
+    def validation_Crea(self, objet_demandecrea, valid_crea: bool):  # Validation création d'ouverture de compte
         objet_demandecrea.validation(valid_crea)
-        if objet_demandecrea.valide is True: # Si la demande est validé, création du compte, envoi un mail avec login/mdp + mis en True
+        if objet_demandecrea.valide is True:  # Si la demande est validé, création du compte, envoi un mail avec login/mdp + mis en True
             # TODO envoi de mail avec id/mdp
             # TODO création de compte banquaire
             objet_demandecrea.creation_compte_User()
-        elif objet_demandecrea.valide is False: # Si la demande n'est pas valider = envoi de mail demande info + mis en False
-            pass # TODO envoi de mail avec une demande d'info supplementaire
+        elif objet_demandecrea.valide is False:  # Si la demande n'est pas valider = envoi de mail demande info + mis en False
+            pass  # TODO envoi de mail avec une demande d'info supplementaire
         else:  # Erreur
             print("Erreur/En attente")
 
@@ -102,9 +101,6 @@ class Agent(User):
         pass
 """
 
-
-
-
 if __name__ == "__main__":
     # u = Agent("0000")
     # list = u.flitre_compte()
@@ -112,7 +108,7 @@ if __name__ == "__main__":
     test = {"nom": "dieoz",
             "prenom": "marc",
             "id": "14sdsd5",
-            "email": "truc@mac.com",
+            "mail": "truc@mac.com",
             "tel": "01546843"
             }
     Agent.cree_compte_agent(test)
