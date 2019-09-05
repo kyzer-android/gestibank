@@ -2,6 +2,7 @@
 import logging
 from sql.sql import connexion
 from compte_user.user import User
+from demande_crea.demande_crea_compte import DemandCreaCompte as Creation
 
 
 class Agent(User):
@@ -10,18 +11,45 @@ class Agent(User):
     def __init__(self, id):
         super().__init__("AGENT", id)
 
-    def flitre_compte(self):  # Filtre les demande de création de compte avec le matricule agent
+    def flitre_compte(self):  # Retourne les demande de création de compte avec le id agent
         cnx = connexion()
         cursor = cnx.cursor()
+        requette = "SELECT * FROM demande_creacompte WHERE affect = '" + self.id + "'"
 
         try:
-            logging.debug("SELECT * FROM demande_creacompte WHERE affect = '" + self.matricule + "'")
-            cursor.execute("SELECT * FROM demande_creacompte WHERE affect = '" + self.matricule + "'")
-            True
+            logging.debug(requette)
+            cursor.execute(requette)
+            list_crea = cursor.fetchall()
+
+            for demande in list_crea :
+                logging.debug(demande)
+
         except:
             logging.warning("Erreur base de donnée")
-            False
 
+        else:
+
+            return list_crea
+
+    def __str__(self):
+        test = (self.id,
+                self.nom,
+                self.prenom,
+                self.type_user,
+                self.email,
+                self.tel,
+                self.debut_contrat)
+
+        return str(test)
+
+    def mise_a_jour(self, **kwargs):
+        list_arg = dict({"nom": self.nom,
+                         "prenom": self.prenom,
+                          "email": self.email,
+                          "tel": self.tel})
+        User.update("agent", self.id, **list_arg)
+
+"""
     def validation(self, agent_validation: bool):  # Validation création d'ouverture de compte
         cnx = connexion()
         cursor = cnx.cursor()
@@ -42,8 +70,8 @@ class Agent(User):
         try:
             if self.valid is True:  # @Si la demande est validé, création du compte, plus envoi un mail avec login/mdp
                 cursor.execute(ajout_clien, demande_clien)
-                """cursor.execute("INSERT INTO client (NOM, PRENOM, MAIL, TEL, ADRESSE, JUSTIFICATIF)"
-                               "VALUE FROM demande_creacompte (NOM, PRENOM, MAIL, TEL, ADRESSE, JUSTIFICATIF)")"""
+                cursor.execute("INSERT INTO client (NOM, PRENOM, MAIL, TEL, ADRESSE, JUSTIFICATIF)"
+                               "VALUE FROM demande_creacompte (NOM, PRENOM, MAIL, TEL, ADRESSE, JUSTIFICATIF)")
 
                 # TODO Envoi d'un mail contenant l'id et le mot de passe
 
@@ -67,27 +95,13 @@ class Agent(User):
 
     def valid_facilite(self):  # Validation facilité de caisse
         pass
+"""
 
-    def __str__(self):
-        test = (self.id,
-                self.nom,
-                self.prenom,
-                self.type_user,
-                self.email,
-                self.tel,
-                self.debut_contrat)
 
-        return str(test)
-
-    def mise_a_jour(self, **kwargs):
-        list_arg = dict({"nom": self.nom,
-                         "prenom": self.prenom,
-                         "email": self.email,
-                         "tel": self.tel})
-        User.update("agent", self.id, **list_arg)
 
 
 if __name__ == "__main__":
     u = Agent("0000")
-    logging.debug(u)
+    list = u.flitre_compte()
+    print(type(list))
 
