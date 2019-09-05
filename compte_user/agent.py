@@ -48,13 +48,13 @@ class Agent(User):
                 liste_obj.append(Creation(element))
             return liste_obj
 
-    def validation_Crea(self, objet_demandecre, valid_crea:bool): # Validation création d'ouverture de compte
-        objet_demandecre.validation(valid_crea)
-        if objet_demandecre.valide is True: # Si la demande est validé, création du compte, envoi un mail avec login/mdp + mis en True
+    def validation_Crea(self, objet_demandecrea, valid_crea:bool): # Validation création d'ouverture de compte
+        objet_demandecrea.validation(valid_crea)
+        if objet_demandecrea.valide is True: # Si la demande est validé, création du compte, envoi un mail avec login/mdp + mis en True
             # TODO envoi de mail avec id/mdp
             # TODO création de compte banquaire
-            objet_demandecre.creation_compte_User()
-        elif objet_demandecre.valide is False: # Si la demande n'est pas valider = envoi de mail demande info + mis en False
+            objet_demandecrea.creation_compte_User()
+        elif objet_demandecrea.valide is False: # Si la demande n'est pas valider = envoi de mail demande info + mis en False
             pass # TODO envoi de mail avec une demande d'info supplementaire
         else:  # Erreur
             print("Erreur/En attente")
