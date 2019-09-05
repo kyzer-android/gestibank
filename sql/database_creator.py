@@ -1,14 +1,10 @@
-# sql
 import mysql.connector as mysql
 import logging
-
 logging.basicConfig(level=logging.DEBUG)
-
-
-def connexion(base_de_donne='Gestibank', user='root', password=''): #@TODO cree user "gestiUser" sur sql
+def connexion(user='root', password=''): #@TODO cree user "gestiUser" sur sql
     try:
         cnx = mysql.connection.MySQLConnection(user=user, password=password,
-                                         host='127.0.0.1', database=base_de_donne)
+                                         host='127.0.0.1')
 
 
     except mysql.connection.errors.Error as err:
@@ -22,14 +18,13 @@ def connexion(base_de_donne='Gestibank', user='root', password=''): #@TODO cree 
         logging.info(" connexion reussi")
         return cnx
 
-def errorlog(e):
-    logging.warning("Error code:", e.errno)  # error number
-    logging.warning("SQLSTATE value:", e.sqlstate) # SQLSTATE value
-    logging.warning("Error message:", e.msg)  # error message
-    logging.warning("Error:", e)  # errno, sqlstate, msg values
-    s = str(e)
-    logging.warning("Error:", s)  # errno, sqlstate, msg valu
-
-
-if __name__=="__main__":
-    cnx=connexion()
+cnx=connexion()
+cursor=cnx.cursor()
+for line in open("database.sql"):
+    try:
+        cursor.execute(line)
+        cnx.commit()
+    except Exception as e:
+        logging.warning("erreur",e)
+    else:
+        print(line)
