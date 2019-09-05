@@ -6,9 +6,9 @@ from sql.sql import connexion
 class DemandCreaCompte:
 
     def __init__(self, valeur):
-        logging.debug(type(valeur))
+        #logging.debug(type(valeur))
         if type(valeur) == type(dict()):
-            logging.debug("inside dict")
+            #logging.debug("inside dict")
             self.nom = valeur["nom"]
             self.prenom = valeur["prenom"]
             self.id = valeur["id"]
@@ -20,7 +20,7 @@ class DemandCreaCompte:
             self.affect = None
 
         elif type(valeur) == type(tuple()):
-            logging.debug("inside tuple")
+            #logging.debug("inside tuple")
             self.nom = valeur[0]
             self.prenom = valeur[1]
             self.id = valeur[2]
@@ -56,7 +56,8 @@ class DemandCreaCompte:
         cursor = cnx.cursor()
         self.affect = agent
         try:
-            affectation = ("UPDATE demande_creation SET id =" + self.id + "WHERE agent =" + self.agent)
+            affectation = ("UPDATE demande_creacompte SET affect = " + self.affect+" WHERE  id =" + self.id )
+            logging.debug(affectation)
             cursor.execute(affectation)
             cnx.commit()
 
@@ -70,9 +71,10 @@ class DemandCreaCompte:
     def validation(self, valide):  # L'agent valide le client
         cnx = connexion()
         cursor = cnx.cursor()
-        self.affect = valide
+        self.valid = valide
         try:
-            validation = ("UPDATE demande_creation SET id =" + self.id + "WHERE validation =" + self.valide)
+            validation = ("UPDATE demande_creacompte SET valide = " + self.valid+" WHERE  id =" + self.id )
+            logging.debug(validation)
             cursor.execute(validation)
             cnx.commit()
 
@@ -119,7 +121,7 @@ if __name__ == "__main__":
             }
 
     objet_test = DemandCreaCompte(test)
-    print(objet_test)
-    objet_test2=DemandCreaCompte(('dieoz', 'marc', '145', 'truc@mac.com', '01546843', '5 rue de la voie rouge 91216  Lamotte', 'repertoir\\distant\\ ', None, None)
-                                 )
+
+    #objet_test2=DemandCreaCompte(('dieoz', 'marc', '145', 'truc@mac.com', '01546843', '5 rue de la voie rouge 91216  Lamotte', 'repertoir\\distant\\ ', None, None)
+    objet_test.validation("true")
     print(objet_test)
