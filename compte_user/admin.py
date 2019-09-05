@@ -42,6 +42,20 @@ class Admin(User):
     def affecter_demande(self,objet,agent):
         objet.affectation(agent)
 
+    def cree_compte_agent(self,valeur):
+        if type(valeur) == type(dict()):
+            #logging.debug("inside dict")
+            id = valeur["id"]
+            nom = valeur["nom"]
+            prenom = valeur["prenom"]
+            email = valeur["email"]
+            tel = valeur["tel"]
+            adresse = valeur["adresse"]
+            debut_contrat = valeur["debut_contrat"]
+
+
+
+
     def __str__(self):
         test = (self.id,
                 self.nom,

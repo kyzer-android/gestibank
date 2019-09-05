@@ -3,7 +3,7 @@ import logging
 from sql.sql import connexion
 from compte_user.user import User
 from demande_crea.demande_crea_compte import DemandCreaCompte as Creation
-
+import datetime
 
 class Agent(User):
     # cnx = connexion()
@@ -20,12 +20,42 @@ class Agent(User):
                 self.tel,
                 self.debut_contrat)
         return str(test)
+
+    @classmethod
+    def cree_compte_agent(self,valeur):
+        if type(valeur) == type(dict()):
+            logging.debug("inside dict")
+            id = valeur["id"]
+            nom = valeur["nom"]
+            prenom = valeur["prenom"]
+            email = valeur["email"]
+            tel = valeur["tel"]
+            debut_contrat =datetime.date.today()
+            logging.debug(debut_contrat)
+            cnx=connexion()
+            cursor=cnx.cursor()
+            ajout_clien = ("INSERT INTO agent (ID, NOM, PRENOM, EMAIL, TEL, DEBUT_CONTRAT)"
+                           "VALUES ( %s, %s, %s, %s, %s, %s)")
+            demande_clien = (id, nom, prenom,email, tel,debut_contrat)
+
+        try:
+            cursor.execute(ajout_clien, demande_clien)
+            cnx.commit()
+        except Exception as e:
+            logging.warning("problème d'insertion ", e)
+        finally:
+             cnx.close()
+
+    def modification_compte_agent(self,valeur):
+            pass
+
+
     def mise_a_jour(self, **kwargs):
-        list_arg = dict({"nom": self.nom,
-                         "prenom": self.prenom,
-                          "email": self.email,
-                          "tel": self.tel})
-        User.update("agent", self.id, **list_arg)
+            list_arg = dict({"nom": self.nom,
+                             "prenom": self.prenom,
+                              "email": self.email,
+                              "tel": self.tel})
+            User.update("agent", self.id, **list_arg)
 
 
 
@@ -74,8 +104,15 @@ class Agent(User):
 
 
 
-#TEST
+
 if __name__ == "__main__":
-    u = Agent("0000")
-    list = u.flitre_compte()
-    print(type(list[1]))
+    # u = Agent("0000")
+    # list = u.flitre_compte()
+    # print(type(list[1]))
+    test = {"nom": "dieoz",
+            "prenom": "marc",
+            "id": "14sdsd5",
+            "email": "truc@mac.com",
+            "tel": "01546843"
+            }
+    Agent.cree_compte_agent(test)

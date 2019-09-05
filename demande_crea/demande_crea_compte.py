@@ -6,9 +6,9 @@ from sql.sql import connexion
 class DemandCreaCompte:
 
     def __init__(self, valeur):
-        #logging.debug(type(valeur))
+        # logging.debug(type(valeur))
         if type(valeur) == type(dict()):
-            #logging.debug("inside dict")
+            # logging.debug("inside dict")
             self.nom = valeur["nom"]
             self.prenom = valeur["prenom"]
             self.id = valeur["id"]
@@ -20,7 +20,7 @@ class DemandCreaCompte:
             self.affect = None
 
         elif type(valeur) == type(tuple()):
-            #logging.debug("inside tuple")
+            # logging.debug("inside tuple")
             self.nom = valeur[0]
             self.prenom = valeur[1]
             self.id = valeur[2]
@@ -56,7 +56,7 @@ class DemandCreaCompte:
         cursor = cnx.cursor()
         self.affect = agent
         try:
-            affectation = ("UPDATE demande_creacompte SET affect = " + self.affect+" WHERE  id =" + self.id )
+            affectation = ("UPDATE demande_creacompte SET affect = " + self.affect + " WHERE  id =" + self.id)
             logging.debug(affectation)
             cursor.execute(affectation)
             cnx.commit()
@@ -74,7 +74,7 @@ class DemandCreaCompte:
         cursor = cnx.cursor()
         self.valid = valide
         try:
-            validation = ("UPDATE demande_creacompte SET valide = " + self.valid+" WHERE  id =" + self.id )
+            validation = ("UPDATE demande_creacompte SET valide = " + self.valid + " WHERE  id =" + self.id)
             logging.debug(validation)
             cursor.execute(validation)
             cnx.commit()
@@ -108,10 +108,14 @@ class DemandCreaCompte:
                        "VALUES ( %s, %s, %s, %s, %s, %s, %s, %s)")
         demande_clien = (self.id, self.nom, self.prenom, self.mail, self.tel, self.adresse, self.justificatif,
                          self.affect)
-        cursor.execute(ajout_clien, demande_clien)
-        cnx.commit()
+        try:
+            cursor.execute(ajout_clien, demande_clien)
+            cnx.commit()
+        except Exception as e:
+            logging.warning("problème d'insertion ", e)
+        finally:
+            cnx.close()
 
-        cnx.close()
 
 
 if __name__ == "__main__":
@@ -127,7 +131,7 @@ if __name__ == "__main__":
 
     objet_test = DemandCreaCompte(test)
 
-    #objet_test2=DemandCreaCompte(('dieoz', 'marc', '145', 'truc@mac.com', '01546843', '5 rue de la voie rouge 91216  Lamotte', 'repertoir\\distant\\ ', None, None)
+    # objet_test2=DemandCreaCompte(('dieoz', 'marc', '145', 'truc@mac.com', '01546843', '5 rue de la voie rouge 91216  Lamotte', 'repertoir\\distant\\ ', None, None)
     objet_test.validation("true")
     print(objet_test)
-    objet_test.creation_compte_User()
+    # objet_test.creation_compte_User()
