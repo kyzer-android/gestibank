@@ -19,9 +19,7 @@ class Agent(User):
                 self.email,
                 self.tel,
                 self.debut_contrat)
-
         return str(test)
-
     def mise_a_jour(self, **kwargs):
         list_arg = dict({"nom": self.nom,
                          "prenom": self.prenom,
@@ -35,7 +33,6 @@ class Agent(User):
         cnx = connexion()
         cursor = cnx.cursor()
         requette = "SELECT * FROM demande_creacompte WHERE affect = '" + self.id + "'"
-
         try:
             logging.debug(requette)
             cursor.execute(requette)
@@ -43,41 +40,28 @@ class Agent(User):
 
             for demande in liste_crea :
                 logging.debug(demande)
-
         except:
             logging.warning("Erreur base de donnée")
-
         else:
             liste_obj = []
             for element in liste_crea:
                 liste_obj.append(Creation(element))
             return liste_obj
 
-
-
-
     def validation_Crea(self, objet, valid_crea:bool): # Validation création d'ouverture de compte
-        #requette = "UPDATE demande_creacompte SET affect = True where id = '" + self.id + "'"
         objet.validation(valid_crea)
-        if objet.valide is True: # @Si la demande est validé, création du compte, plus envoi un mail avec login/mdp
+        if objet.valide is True: # Si la demande est validé, création du compte, envoi un mail avec login/mdp + mis en True
             # TODO envoi de mail avec id/mdp
+            # TODO création de compte banquaire
             Creation.creation_compte_User()
-        elif objet.valide
+        elif objet.valide is False: # Si la demande n'est pas valider = envoi de mail demande info + mis en False
+            pass # TODO envoi de mail avec une demande d'info supplementaire
+        else:  # Erreur
+            print("Erreur/En attente")
 
-
-
-            elif self.valid is False:  # @sil la demande n'est pas valider (envoi de mail + demande mis en attente)
-                pass
-                # TODO Envoi d'un mail demandant les bonnes informations
-            else:  # Erreur
-                print("Erreur")
-        except:
-            logging.warning("Problème de validation")
-        else:
-            pass
-            # TODO Création d'un compte banquaire par default avec la classe création de compte banquaire
 
 """
+
     def modif_compte_User(self):  # Modification compte client
         pass
 
@@ -90,7 +74,7 @@ class Agent(User):
 
 
 
-
+#TEST
 if __name__ == "__main__":
     u = Agent("0000")
     list = u.flitre_compte()
