@@ -5,6 +5,7 @@ from compte_user.user import User
 from demande_crea.demande_crea_compte import DemandCreaCompte as Creation
 import datetime
 from compte_bancaire.compte import Compte
+from compte_user.client import  Client
 
 
 class Agent(User):
@@ -90,14 +91,20 @@ class Agent(User):
         else:  # Erreur
             print("Erreur/En attente")
 
-    def creation_Compte_Bank(self, id):
+    def creation_Compte_Bank(self, id): #Creation compte banquaire
         Compte.creation_compteban(id)
 
+    def modif_compte_client(self, objet_client, changement : dict):  # Modification compte client
+        objet_client.nom = changement["nom"]
+        objet_client.prenom = changement["prenom"]
+        objet_client.mail = changement["mail"]
+        objet_client.tel = changement["tel"]
+        objet_client.adresse = changement["adresse"]
+        Client.mise_a_jour(objet_client)
 
-    """
-    def modif_compte_client(self, client):  # Modification compte client
-        pass
+    def creation_loggin(self, ):
 
+"""
     def valid_cheque(self):  # Validation demande chéquier
         pass
 
@@ -105,7 +112,7 @@ class Agent(User):
         pass
 """
 
-if __name__ == "__main__":
+if __name__ == "__main__": #TEST
     # u = Agent("0000")
     # list = u.flitre_compte()
     # print(type(list[1]))
@@ -117,18 +124,18 @@ if __name__ == "__main__":
     #         }
 
 
-    test = Agent("999")
-    test2 = {"nom": "dieoz",
-            "prenom": "marc",
-            "id": "145",
-            "mail": "truc@mac.com",
-            "tel": "01546843",
-            "adresse": "5 rue de la voie rouge 91216  Lamotte",
-            "justificatif": "repertoir\distant\ ",
-            "affect" :  "999"
-            }
-    test3 = Creation(test2)
-    test.validation_Crea(test3, False)
+    # test = Agent("999")
+    # test2 = {"nom": "dieoz",
+    #         "prenom": "marc",
+    #         "id": "145",
+    #         "mail": "truc@mac.com",
+    #         "tel": "01546843",
+    #         "adresse": "5 rue de la voie rouge 91216  Lamotte",
+    #         "justificatif": "repertoir\distant\ ",
+    #         "affect" :  "999"
+    #         }
+    # test3 = Creation(test2)
+    # test.validation_Crea(test3, False)
 
 
 
