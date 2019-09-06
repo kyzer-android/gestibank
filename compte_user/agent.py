@@ -6,6 +6,8 @@ from demande_crea.demande_crea_compte import DemandCreaCompte as Creation
 import datetime
 from compte_bancaire.compte import Compte
 from compte_user.client import  Client
+import string
+from random import sample
 
 
 class Agent(User):
@@ -102,7 +104,12 @@ class Agent(User):
         objet_client.adresse = changement["adresse"]
         Client.mise_a_jour(objet_client)
 
-    def creation_loggin(self, ):
+    def creation_mdp(self):
+        pop = string.ascii_letters + string.digits # lettres min + lettres maj + chiffres
+        longueur = 10 # le mot de passe fera 10 caractères de long
+        mdp = ''.join(sample(pop, longueur)) # sample retourne une portion aléatoire et de taille k à partir de la séquence pop
+        return  mdp
+
 
 """
     def valid_cheque(self):  # Validation demande chéquier
