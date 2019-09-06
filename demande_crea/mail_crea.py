@@ -3,17 +3,15 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 import logging
 from sql.sql import connexion
-from compte_user.client import Client
+from compte_user.user import User
 from demande_crea.demande_crea_compte import DemandCreaCompte as Creation
 
 
-class Mail_Crea(Client):
+class Mail_Crea(User):
 
     def __init__(self, id):
         super().__init__("CLIENT", id)
 
-
-        return str(test)
 
     def adresse_mail(self):
         mail_user = self.mail
