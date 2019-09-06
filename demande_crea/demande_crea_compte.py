@@ -17,7 +17,7 @@ class DemandCreaCompte:
             self.adresse = valeur["adresse"]
             self.justificatif = valeur["justificatif"]
             self.valid = None
-            self.affect = None
+            self.affect = valeur["affect"]
 
         elif type(valeur) == type(tuple()):
             # logging.debug("inside tuple")
@@ -101,10 +101,10 @@ class DemandCreaCompte:
         )
         return str(test)
 
-    def creation_compte_User(self):
+    def creation_compte_client(self):
         cnx = connexion()
         cursor = cnx.cursor()
-        ajout_clien = ("INSERT INTO client (ID, NOM, PRENOM, MAIL, TEL, ADRESSE, JUSTIFICATIF, AGENT_AFFECTER)"
+        ajout_clien = ("INSERT INTO client (ID, NOM, PRENOM, MAIL, TEL, ADRESSE, JUSTIFICATIF, id_agent)"
                        "VALUES ( %s, %s, %s, %s, %s, %s, %s, %s)")
         demande_clien = (self.id, self.nom, self.prenom, self.mail, self.tel, self.adresse, self.justificatif,
                          self.affect)
@@ -126,12 +126,15 @@ if __name__ == "__main__":
             "mail": "truc@mac.com",
             "tel": "01546843",
             "adresse": "5 rue de la voie rouge 91216  Lamotte",
-            "justificatif": "repertoir\distant\ "
+            "justificatif": "repertoir\distant\ ",
+            "affect" :  "999"
             }
 
     objet_test = DemandCreaCompte(test)
 
     # objet_test2=DemandCreaCompte(('dieoz', 'marc', '145', 'truc@mac.com', '01546843', '5 rue de la voie rouge 91216  Lamotte', 'repertoir\\distant\\ ', None, None)
-    objet_test.validation("true")
+    objet_test.validation(True)
+    objet_test.affectation("999")
     print(objet_test)
-    # objet_test.creation_compte_User()
+    objet_test.creation_compte_client()
+
