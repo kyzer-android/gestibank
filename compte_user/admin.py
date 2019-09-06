@@ -3,6 +3,8 @@ from sql.sql import connexion
 from compte_user.user import User
 from demande_crea.demande_crea_compte import DemandCreaCompte
 from datetime import date
+from compte_user.agent import Agent
+from compte_user.client import Client
 
 
 class Admin(User):
@@ -39,8 +41,23 @@ class Admin(User):
         cnx.close()
         return liste_obj
 
-    def affecter_demande(self, objet, agent):
-        objet.affectation(agent)
+    def affecter_demande(self, objet_demandcrea, agent):
+        objet_demandcrea.affectation(agent)
+
+    def modifier_compte_agent(self,objet_agent:Agent,valeur:dict):
+        objet_agent.mise_a_jour(valeur)
+
+    def suprimer_agent(self,id_Agent):
+        if not self.trouver_id(table="client",where="id_agent",id=id_Agent):
+            cnx=connexion()
+            cursor=cnx.cursor()
+            param=(" DELETE FROM `agent` WHERE `agent`.`ID` = '" +id_Agent+"'")
+            logging.debug(param)
+            cursor.execute(param)
+            cnx.commit()
+            logging.warning("l'agent a ete supprimer")
+        else:
+            logging.warning("l'agent a toujours des client affecter")
 
     @classmethod
     def cree_compte_agent(self, valeur):
@@ -75,19 +92,18 @@ class Admin(User):
             logging.warning("L'Agent  Existe déjà ")
 
 
+
     def __str__(self):
         test = (self.id,
                 self.nom,
                 self.prenom,
                 self.type_user,
-                self.mail,
-                self.tel
-                )
+                self.mail)
 
         return str(test)
 
 
-if __name__ == "__main__":
+# if __name__ == "__main__":
     # Objtest=Admin("0014")
     # print(Objtest)
     # liste_demande = Objtest.lister_demand_crea()
@@ -95,11 +111,15 @@ if __name__ == "__main__":
     # for liste in liste_demande:
     #     i+=1
     #     print(liste_demande[i])
-    test = {"id": "14fd55r5",
-            "nom": "dieoz",
-            "prenom": "marc",
-            "mail": "truc@mac.com",
-            "tel": "01546843"
-            }
-    print("{}".format(test))
-    Admin.cree_compte_agent(test)
+    # test = {"id": "14fd55r5",
+    #         "nom": "dieoz",
+    #         "prenom": "marc",
+    #         "mail": "truc@mac.com",
+    #         "tel": "01546843"
+    #         }
+    # print("{}".format(test))
+    # #Admin.cree_compte_agent(test)
+    # compAD=Admin("12")
+    # print(compAD)
+    # compAD.suprimer_agent("41")
+

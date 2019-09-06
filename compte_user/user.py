@@ -17,9 +17,10 @@ class User:
         # verifie si l'objet existe dans la BD grace a son id,si non le cree
         if not User.trouver_id(type_user, id):
             logging.warning("L'ID N'A PAS été trouvé ")
-            for colone in res:
-                self.__setattr__(colone[0].lower(), None)
-            self.id = id
+            # for colone in res:
+            #     self.__setattr__(colone[0].lower(), None)
+            # self.id = id
+            breakpoint()
         # cree un objet a partir des valeur de la BD
         else:
             for colone in res:
@@ -41,8 +42,7 @@ class User:
         logging.debug("login reussi")
         logging.debug(type_user)
         cnx.close()
-        return type_user
-
+        return type_user, id
 
     @classmethod  # mise a jour de la BD en fonction des paramètres de la type_user utiliser
     def update(self, type_user, id, **kwargs):

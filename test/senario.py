@@ -27,7 +27,7 @@ Agentn01 = {"nom": "Agent",
 
 Administrateur.cree_compte_agent(Agentn01)
 Agent007=Agent("007")
-print("Voila l'administarteur: {}".format(Agent007))
+print("Voila l'agent: {}".format(Agent007))
 print("-----------------------------------------------------------------------------")
 os.system("pause")
 Administrateur.suprimer_agent("007")

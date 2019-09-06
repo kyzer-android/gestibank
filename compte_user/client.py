@@ -14,10 +14,9 @@ class Client(User):
         logging.debug(data)
         cursor.execute(data)
         res=cursor.fetchall()
-        liste_compte= []
+        self.liste_compte= []
         for colon in res :
-
-            liste_compte.append(Compte(colon))
+            self.liste_compte.append(Compte(colon[0]))
 
 
     def modifMDP(self, oldMDP, newMDP):
@@ -51,7 +50,8 @@ class Client(User):
                 self.mail,
                 self.tel,
                 self.adresse,
-                self.justificatif)
+                self.justificatif,
+                self.liste_compte)
 
         return str(test)
 
@@ -83,9 +83,10 @@ class Client(User):
         User.update("client", self.id, **list_arg)
 
 
-if __name__ == "__main__":
-
- x=Client("0029")
- print(x)
-
-
+# if __name__ == "__main__":
+#
+#  x=Client("145")
+#  print(x)
+#  print(x.liste_compte[0])
+#
+#

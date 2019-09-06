@@ -17,7 +17,7 @@ class DemandCreaCompte:
             self.adresse = valeur["adresse"]
             self.justificatif = valeur["justificatif"]
             self.valid = None
-            self.affect = valeur["affect"]
+            self.affect = None
 
         elif type(valeur) == type(tuple()):
             # logging.debug("inside tuple")
@@ -80,7 +80,7 @@ class DemandCreaCompte:
             cnx.commit()
 
         except:
-            logging.warning("Problème de validation")
+            logging.warning("Problème de  validation")
             return False
         else:
             return True
@@ -118,23 +118,23 @@ class DemandCreaCompte:
 
 
 
-if __name__ == "__main__":
-    cnx = connexion()
-    test = {"nom": "dieoz",
-            "prenom": "marc",
-            "id": "145",
-            "mail": "truc@mac.com",
-            "tel": "01546843",
-            "adresse": "5 rue de la voie rouge 91216  Lamotte",
-            "justificatif": "repertoir\distant\ ",
-            "affect" :  "999"
-            }
-
-    objet_test = DemandCreaCompte(test)
-
-    # objet_test2=DemandCreaCompte(('dieoz', 'marc', '145', 'truc@mac.com', '01546843', '5 rue de la voie rouge 91216  Lamotte', 'repertoir\\distant\\ ', None, None)
-    objet_test.validation(True)
-    objet_test.affectation("999")
-    print(objet_test)
-    objet_test.creation_compte_client()
+# if __name__ == "__main__":
+    # cnx = connexion()
+    # test = {"nom": "dieoz",
+    #         "prenom": "marc",
+    #         "id": "145",
+    #         "mail": "truc@mac.com",
+    #         "tel": "01546843",
+    #         "adresse": "5 rue de la voie rouge 91216  Lamotte",
+    #         "justificatif": "repertoir\distant\ ",
+    #         "affect" :  "999"
+    #         }
+    #
+    # objet_test = DemandCreaCompte(test)
+    #
+    # # objet_test2=DemandCreaCompte(('dieoz', 'marc', '145', 'truc@mac.com', '01546843', '5 rue de la voie rouge 91216  Lamotte', 'repertoir\\distant\\ ', None, None)
+    # objet_test.validation(True)
+    # objet_test.affectation("999")
+    # print(objet_test)
+    # objet_test.creation_compte_client()
 
