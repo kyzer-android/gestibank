@@ -1,5 +1,6 @@
 #client
 from compte_user.user import User
+from compte_bancaire.compte import Compte
 from sql.sql import connexion
 import logging
 
@@ -7,6 +8,17 @@ import logging
 class Client(User):
     def __init__(self, id):
         super().__init__("Client", id)
+        cnx=connexion()
+        cursor=cnx.cursor()
+        data =("SELECT ID_compte FROM `compte` WHERE ID_client = "+id)
+        logging.debug(data)
+        cursor.execute(data)
+        res=cursor.fetchall()
+        liste_compte= []
+        for colon in res :
+
+            liste_compte.append(Compte(colon))
+
 
     def modifMDP(self, oldMDP, newMDP):
         cnx = connexion()
@@ -43,6 +55,23 @@ class Client(User):
 
         return str(test)
 
+    def realiser_virement (self,info_destinataire : dict , compte_emetteur: Compte,montant_transaction): # TODO envoi envoyer (notif) et Argent
+        compte_emetteur.solde
+        if (compte_emetteur.solvabilite()== True):
+            compte_emetteur.solde = compte_emetteur.solde - montant_transaction
+            logging.warning("solde positif == Transaction réussie")
+            # TODO  effectuer_transaction ()
+           #TODO  compte_emetteur.miseajour ('solde' : compte_emetteur.solde)
+
+        #if (compte_emetteur.solvabilite()== False and self.CC_decouverte == True):
+            #self.solde = self.solde - montant
+            #logging.warning("solde negatif et CC autorise decouverte == Transaction réussie")
+            #return self.solde
+        if (Compte.solvabilite()== False ):
+            logging.warning("solde negatif et CC non autorise decouverte == Transaction refusée")
+
+
+
     def mise_a_jour(self):
         list_arg = dict({"nom": self.nom,
                          "prenom": self.prenom,
@@ -55,14 +84,8 @@ class Client(User):
 
 
 if __name__ == "__main__":
-    x = Client('0021')
-    print(x)
-    x.nom="456dsdjss$"
-    x.mise_a_jour()
-    print(x)
-    y=Client('tesdsqst')
-    y.nom='maoz'
 
-    y.mise_a_jour()
-    print(y)
+ x=Client("0029")
+ print(x)
+
 
